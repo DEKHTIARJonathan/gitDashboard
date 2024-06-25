@@ -16,8 +16,8 @@ from django.template import RequestContext
 import gitengine.core as gitEngine
 from gitengine.core import GitRepo
 from gitengine.graph import GitGraphCanvas
-from issue import Mantis1_7IssuePane, NoIssueFoundException
-from utils import checkRepoAuthorization
+from gitview.issue import Mantis1_7IssuePane, NoIssueFoundException
+from gitview.utils import checkRepoAuthorization
 
 
 def getGitPath():
@@ -88,7 +88,7 @@ class BranchForm(forms.Form):
 			for sh in shas.keys():
 				nameBranches[shas[sh]] = sh
 			sortedNameBranches = nameBranches.keys()
-			sortedNameBranches.sort()
+			list(sortedNameBranches).sort()
 			for br in sortedNameBranches:
 				if nameBranches[br] != repo.head.commit.hexsha:
 					branches.append((nameBranches[br], br))

@@ -1,12 +1,12 @@
 import hashlib
 from datetime import datetime
 
-from django.utils.encoding import smart_unicode, DjangoUnicodeDecodeError
+from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
 
 
 def getGravatarUrl(email, size):
 	md5Digester = hashlib.md5()
-	md5Digester.update(email)
+	md5Digester.update(email.encode("utf-8"))
 	md5Email = md5Digester.hexdigest()
 	return "http://www.gravatar.com/avatar/" + md5Email + "?d=mm&s=" + str(size)
 
@@ -98,7 +98,7 @@ def canvasCircle(x, y, radius, color, tooltip, cmt, gitGraph):
 				if len(msg) > maxLen:
 					maxLen = len(msg)
 				try:
-					message = smart_unicode(msg)
+					message = smart_str(msg)
 				except TypeError:
 					pass
 				except DjangoUnicodeDecodeError:
@@ -172,7 +172,7 @@ class CommitGraph:
 		tooltip.append("ID: " + self.cmt.commit.hexsha)
 		tooltip.append("Date: " + dt.strftime('%Y-%m-%d %H:%M:%S'))
 		message = self.cmt.commit.message
-		rows = smart_unicode(message).split('\n')
+		rows = smart_str(message).split('\n')
 		for row in rows:
 			if len(row) > 0:
 				tooltip.append(row)
@@ -343,7 +343,7 @@ class GitGraphCanvas:
 				#find maximum number of commit for each date
 			for branchSha in sortedBranches:
 				try:
-					if len(branchesCmtsDates[branchSha][dt]) > max:
+					if len(branchesCmtsDates[branchSha][dt]) > xMax:
 						xMax = len(branchesCmtsDates[branchSha][dt])
 				except KeyError:
 					pass

@@ -5,7 +5,7 @@ from os import listdir, makedirs
 from os.path import isdir, sep
 
 import ghdiff
-from django.utils.encoding import smart_unicode, DjangoUnicodeDecodeError
+from django.utils.encoding import smart_str, DjangoUnicodeDecodeError
 from git import Repo, Blob, Diff
 
 try:
@@ -221,7 +221,7 @@ class GitChange:
 		blobOld = Blob(self.commit.commit.repo, unhexlify(self.oldSha)).data_stream.read()
 		blobNew = Blob(self.commit.commit.repo, unhexlify(self.newSha)).data_stream.read()
 		try:
-			diffContent = ghdiff.diff(smart_unicode(blobOld).splitlines(), smart_unicode(blobNew).splitlines())
+			diffContent = ghdiff.diff(smart_str(blobOld).splitlines(), smart_str(blobNew).splitlines())
 		except DjangoUnicodeDecodeError:
 			diffContent = ghdiff.diff(str(blobOld).decode('latin1').splitlines(),
 			                          str(blobNew).decode('latin1').splitlines())
@@ -232,7 +232,7 @@ class GitChange:
 		blobNew = Blob(self.commit.commit.repo, unhexlify(self.newSha)).data_stream.read()
 		diff = ''
 		try:
-			diffs = unified_diff(smart_unicode(blobOld).splitlines(), smart_unicode(blobNew).splitlines())
+			diffs = unified_diff(smart_str(blobOld).splitlines(), smart_str(blobNew).splitlines())
 		except DjangoUnicodeDecodeError:
 			diffs = unified_diff(str(blobOld).decode('latin1').splitlines(), str(blobNew).decode('latin1').splitlines())
 		for line in diffs:
@@ -272,5 +272,3 @@ def commitChanges(repo, sha1, sha2):
 	c1 = repo.getCommit(sha1)
 	c2 = repo.getCommit(sha2)
 	return c1.commit.diff(c2.commit)
-
-

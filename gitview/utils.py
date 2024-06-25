@@ -19,7 +19,6 @@ def checkRepoAuthorization(request, reposPath=None):
 		if os.system(cmd) != 0:
 			return False
 	except Exception as e:
-		print e
+		print(e)
 		return False
 	return True
-
